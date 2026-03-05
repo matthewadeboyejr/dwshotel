@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ReduxProvider from "./lib/redux/provider";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { Toaster } from "sonner";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -69,7 +70,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
@@ -78,6 +79,7 @@ export default function RootLayout({
             {children}
             <Footer />
           </ReduxProvider>
+          <Toaster richColors position="top-right" theme="dark" />
         </ThemeProvider>
       </body>
     </html>

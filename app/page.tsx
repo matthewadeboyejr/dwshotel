@@ -7,7 +7,8 @@ import StealDealSection from './components/StealDealSection';
 import CommonQueriesSection from './components/CommonQueriesSection';
 import SpotlightsSection from './components/SpotlightsSection';
 import CommitmentSection from './components/CommitmentSection';
-import Footer from './components/Footer';
+
+import IntroVideo from './components/IntroVideo';
 
 export default function Home() {
   return (
@@ -19,9 +20,8 @@ export default function Home() {
       <SafestAffordableSection />
       <StealDealSection />
       <CommonQueriesSection />
+      {/* <IntroVideo /> */}
       <CommitmentSection />
-
-
 
     </div>
   );

@@ -1,24 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { ROOMS } from '../../data/rooms';
-import { Star, MapPin, Wifi, Wind, Tv, Coffee, ArrowUpRight, CheckCircle, Bath, BedDouble, Users, Maximize, Share2, Heart, Loader2 } from 'lucide-react';
+import { Star, MapPin, Wifi, Wind, Tv, Coffee, ArrowUpRight, CheckCircle, Bath, BedDouble, Users, Maximize, Share2, Heart, Loader2, CreditCard } from 'lucide-react';
 import Image from 'next/image';
 import CommitmentSection from '@/app/components/CommitmentSection';
 import { useGetCategoryAvailabilityQuery, useCreateReservationMutation } from '@/app/lib/redux/services/api';
 import Input from '@/app/components/ui/Input';
+import { usePaystack } from '@/app/hooks/usePaystack';
+import { toast } from 'sonner';
 
 export default function RoomDetailsPage() {
     const params = useParams();
+    const searchParams = useSearchParams();
     const id = Number(params.id);
     const room = ROOMS.find((r) => r.id === id);
 
-    // State for dates
-    const [checkInDate, setCheckInDate] = useState('');
-    const [checkOutDate, setCheckOutDate] = useState('');
+    // State for dates — pre-fill from query params if coming from properties page
+    const [checkInDate, setCheckInDate] = useState(searchParams.get('checkIn') || '');
+    const [checkOutDate, setCheckOutDate] = useState(searchParams.get('checkOut') || '');
     const [person, setPerson] = useState({
         Title: "",
         Surname: "",
@@ -32,13 +35,13 @@ export default function RoomDetailsPage() {
     });
 
     // API Query
-    const { data: availabilityData, error, isLoading } = useGetCategoryAvailabilityQuery(
+    const { data: availabilityData, error, isLoading, isFetching } = useGetCategoryAvailabilityQuery(
         {
             category: room?.category || '',
             arrival: checkInDate,
             departure: checkOutDate
         },
-        { skip: !checkInDate || !checkOutDate || !room } // Skip if dates are missing
+        { skip: !checkInDate || !checkOutDate || !room, refetchOnMountOrArgChange: true }
     );
 
     if (!room) {
@@ -81,43 +84,61 @@ export default function RoomDetailsPage() {
     const totals = calculateTotal();
 
     const [createReservation, { isLoading: isBooking }] = useCreateReservationMutation();
+    const { initializePayment } = usePaystack();
+    const [isPaying, setIsPaying] = useState(false);
 
     const handleBooking = async () => {
         if (!person.Surname || !person.Phone || !person.Email) {
-            alert("Please fill in all required guest details.");
+            toast.warning("Please fill in all required guest details.");
             return;
         }
 
-        const payload = {
-            ReservationId: "",
-            Person: person,
-            BookingDetails: [
-                {
-                    ArrivalDate: checkInDate,
-                    DepartureDate: checkOutDate,
-                    Category: room.category.toUpperCase(),
-                    Quantity: numberOfRooms
-                }
-            ],
-            PaymentDetail: {
-                Amount: totals.grandTotal,
-                TransactionReference: "REF-" + Math.floor(Math.random() * 10000000000),
-                Currency: "NGN",
-                PaymentMethod: "PAYSTACK",
-                PaymentDescription: `Booking for ${room.title}`
-            }
-        };
+        const reference = "REF-" + Math.floor(Math.random() * 10000000000);
+        const amountInKobo = totals.grandTotal * 100;
 
-        try {
-            await createReservation(payload).unwrap();
-            alert("Reservation created successfully!");
-        } catch (err) {
-            console.error("Booking failed:", err);
-            alert("Failed to create reservation. Please try again.");
-        }
+        setIsPaying(true);
+
+        initializePayment({
+            email: person.Email,
+            amount: amountInKobo,
+            reference,
+            onSuccess: async (response) => {
+                try {
+                    const payload = {
+                        ReservationId: "",
+                        Person: person,
+                        BookingDetails: [
+                            {
+                                ArrivalDate: checkInDate,
+                                DepartureDate: checkOutDate,
+                                Category: room.category.toUpperCase(),
+                                Quantity: numberOfRooms
+                            }
+                        ],
+                        PaymentDetail: {
+                            Amount: totals.grandTotal,
+                            TransactionReference: response.reference,
+                            Currency: "NGN",
+                            PaymentMethod: "PAYSTACK",
+                            PaymentDescription: `Booking for ${room.title}`
+                        }
+                    };
+                    await createReservation(payload).unwrap();
+                    toast.success("Payment successful! Reservation created.");
+                } catch (err) {
+                    console.error("Booking failed:", err);
+                    toast.error("Payment was successful but reservation failed. Please contact support with reference: " + response.reference);
+                } finally {
+                    setIsPaying(false);
+                }
+            },
+            onClose: () => {
+                setIsPaying(false);
+            },
+        });
     };
 
-    const isProcessing = isLoading || isBooking;
+    const isProcessing = isFetching || isBooking || isPaying;
 
     return (
         <div className="min-h-screen bg-white dark:bg-background text-black dark:text-foreground font-sans">
@@ -303,8 +324,8 @@ export default function RoomDetailsPage() {
 
                         {/* Availability Status */}
                         {checkInDate && checkOutDate && (
-                            <div className={`p-4 rounded-xl mb-4 text-center ${isLoading ? 'bg-gray-100 dark:bg-zinc-800 text-gray-500' : isAvailable ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
-                                {isLoading ? (
+                            <div className={`p-4 rounded-xl mb-4 text-center ${isFetching ? 'bg-gray-100 dark:bg-zinc-800 text-gray-500' : isAvailable ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
+                                {isFetching ? (
                                     <div className="flex items-center justify-center gap-2">
                                         <Loader2 className="w-4 h-4 animate-spin" />
                                         Checking availability...
@@ -438,18 +459,24 @@ export default function RoomDetailsPage() {
                                 {isBooking ? (
                                     <>
                                         <Loader2 className="w-5 h-5 animate-spin" />
-                                        Processing...
+                                        Creating Reservation...
+                                    </>
+                                ) : isPaying ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Processing Payment...
                                     </>
                                 ) : (
                                     <>
-                                        Confirm Booking
+                                        <CreditCard className="w-5 h-5" />
+                                        Pay & Book
                                         {isAvailable && !isProcessing && <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />}
                                     </>
                                 )}
                             </button></>) : ""}
 
 
-                        <p className="text-center text-gray-400 text-xs mt-4">You won't be charged yet</p>
+                        <p className="text-center text-gray-400 text-xs mt-4">Secured by Paystack</p>
                     </div>
                 </div>
 

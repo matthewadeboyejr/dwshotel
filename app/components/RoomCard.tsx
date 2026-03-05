@@ -13,11 +13,17 @@ interface RoomProps {
     rating: string;
     amenities: string[];
     availableCount?: number;
+    checkIn?: string;
+    checkOut?: string;
 }
 
 export default function RoomCard({ room }: { room: RoomProps }) {
+    const href = room.checkIn && room.checkOut
+        ? `/rooms/${room.id}?checkIn=${room.checkIn}&checkOut=${room.checkOut}`
+        : `/rooms/${room.id}`;
+
     return (
-        <Link href={`/rooms/${room.id}`} className="group cursor-pointer block">
+        <Link href={href} className="group cursor-pointer block">
             {/* Image Card */}
             <div className="relative aspect-4/5 rounded-4xl overflow-hidden mb-6">
                 <img

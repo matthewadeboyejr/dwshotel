@@ -132,7 +132,7 @@ export default function SafestAffordableSection() {
 
               {/* Interior Image (Bottom Right in grid logic, actually part of Col 3 in this structure) */}
               <div className="bg-[#EAD8C6] rounded-3xl overflow-hidden h-[250px] mt-auto">
-                <img src="/safe-home2.jpeg" alt="Interior" className="w-full h-full object-cover" />
+                <img src="/platinum-home.jpeg" alt="Interior" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function AccommodationSection() {
   const [activeTab, setActiveTab] = useState('Deluxe');
 
-  const tabs = ['Deluxe', 'Superior', 'Executive', 'Royal Suite', 'Business Class', 'Platinum'];
+  const tabs = ['Deluxe', 'Superior', 'Platinum', 'Business class', 'Executive', 'Royal Suite'];
 
   const listings = {
     'Deluxe': {

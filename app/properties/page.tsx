@@ -8,6 +8,7 @@ import CommitmentSection from '../components/CommitmentSection';
 import { ROOMS } from '../data/rooms';
 import { useGetAvailabilityQuery } from '@/app/lib/redux/services/api';
 import { Calendar, Search, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface AvailabilityItem {
     Category: string;
@@ -32,7 +33,7 @@ export default function PropertiesPage() {
 
     const handleSearch = () => {
         if (!checkIn || !checkOut) {
-            alert('Please select both Check-in and Check-out dates.');
+            toast.warning('Please select both Check-in and Check-out dates.');
             return;
         }
         setSearchTerms({ arrival: checkIn, departure: checkOut });
@@ -159,7 +160,9 @@ export default function PropertiesPage() {
                                         key={room.id}
                                         room={{
                                             ...room,
-                                            availableCount: searchTerms ? availabilityMap[room.category.toUpperCase()] : undefined
+                                            availableCount: searchTerms ? availabilityMap[room.category.toUpperCase()] : undefined,
+                                            checkIn: searchTerms?.arrival,
+                                            checkOut: searchTerms?.departure
                                         }}
                                     />
                                 ))}
