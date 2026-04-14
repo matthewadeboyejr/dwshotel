@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://api.sbx.dws.hotelman.ng/api/:path*',
+        destination: 'https://api.dws.hotelman.ng/api/:path*',
       },
     ];
   },

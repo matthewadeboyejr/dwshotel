@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function AccommodationSection() {
   const [activeTab, setActiveTab] = useState('Deluxe');
 
-  const tabs = ['Deluxe', 'Superior', 'Platinum', 'Business class', 'Executive', 'Royal Suite'];
+  const tabs = ['Deluxe', 'Superior', 'Platinum', 'Business Class', 'Executive', 'Royal Suite'];
 
   const listings = {
     'Deluxe': {
@@ -106,7 +106,7 @@ export default function AccommodationSection() {
       image: '/platinum-home.jpeg',
       rating: '4.9',
       title: 'Platinum experience for premium guests',
-      price: 'NGN60,000/night',
+      price: 'NGN50,000/night',
       tax: 'Including all taxed',
       basicInfo: [
         { label: 'Total Rooms', value: 'Penthouse' },
@@ -151,11 +151,11 @@ export default function AccommodationSection() {
             <div className="lg:col-span-4 relative h-[400px] lg:h-auto">
               <div className="absolute top-4 right-4 z-10 bg-white px-3 py-1.5 rounded-full flex items-center gap-1 shadow-sm">
                 <Star className="w-3 h-3 text-black fill-black" />
-                <span className="text-xs font-bold text-black">{currentListing.rating}</span>
+                <span className="text-xs font-bold text-black">{currentListing?.rating}</span>
               </div>
               <img
-                src={currentListing.image}
-                alt={currentListing.title}
+                src={currentListing?.image}
+                alt={currentListing?.title}
                 className="w-full h-full object-cover rounded-2xl"
               />
             </div>
@@ -169,10 +169,10 @@ export default function AccommodationSection() {
                   <div>
                     <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-4">DWS Hotel</p>
                     <h3 className="text-2xl font-bold text-black dark:text-white leading-tight mb-4">
-                      {currentListing.title}
+                      {currentListing?.title}
                     </h3>
                   </div>
-                  <Link href={`/rooms/${currentListing.id}`} className="inline-flex items-center text-3xl  text-black dark:text-white hover:underline mt-auto">
+                  <Link href={`/rooms/${currentListing?.id}`} className="inline-flex items-center text-3xl  text-black dark:text-white hover:underline mt-auto">
                     View details
                     <span className="ml-1 bg-black dark:bg-white text-white dark:text-black rounded-full p-0.5 w-6 h-6 flex items-center justify-center text-2xl">↗</span>
                   </Link>
@@ -181,21 +181,21 @@ export default function AccommodationSection() {
                 {/* Column 2: Price & Info */}
                 <div className="flex flex-col bg-white dark:bg-zinc-800 p-6 rounded-2xl">
                   <div className="mb-8">
-                    <h4 className="text-3xl font-bold text-black dark:text-white">{currentListing.price}</h4>
-                    <p className="text-xs text-gray-400 mt-1">{currentListing.tax}</p>
+                    <h4 className="text-3xl font-bold text-black dark:text-white">{currentListing?.price}</h4>
+                    <p className="text-xs text-gray-400 mt-1">{currentListing?.tax}</p>
                   </div>
 
                   <div className="mt-auto">
                     <h5 className="font-bold text-black dark:text-white text-sm mb-4">Basic Information</h5>
                     <div className="space-y-3">
-                      {currentListing.basicInfo.map((info, idx) => (
+                      {currentListing?.basicInfo.map((info, idx) => (
                         <div key={idx} className="flex justify-between text-sm">
                           <span className="text-gray-500 font-medium">{info.label}</span>
                           <span className="text-gray-400">{info.value}</span>
                         </div>
                       ))}
                     </div>
-                    <Link href={`/rooms/${currentListing.id}`}>
+                    <Link href={`/rooms/${currentListing?.id}`}>
                       <button className="px-4 py-4 w-full mt-4 bg-black dark:bg-white text-white dark:text-black text-lg font-medium rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
                         Book Now!
                       </button>

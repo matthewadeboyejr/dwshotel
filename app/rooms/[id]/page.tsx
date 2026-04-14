@@ -8,10 +8,9 @@ import { ROOMS } from '../../data/rooms';
 import { Star, MapPin, Wifi, Wind, Tv, Coffee, ArrowUpRight, CheckCircle, Bath, BedDouble, Users, Maximize, Share2, Heart, Loader2, CreditCard } from 'lucide-react';
 import Image from 'next/image';
 import CommitmentSection from '@/app/components/CommitmentSection';
-import { useGetCategoryAvailabilityQuery, useCreateReservationMutation } from '@/app/lib/redux/services/api';
 import Input from '@/app/components/ui/Input';
-import { usePaystack } from '@/app/hooks/usePaystack';
 import { toast } from 'sonner';
+import { MessageCircle } from 'lucide-react';
 
 export default function RoomDetailsPage() {
     const params = useParams();
@@ -22,27 +21,12 @@ export default function RoomDetailsPage() {
     // State for dates — pre-fill from query params if coming from properties page
     const [checkInDate, setCheckInDate] = useState(searchParams.get('checkIn') || '');
     const [checkOutDate, setCheckOutDate] = useState(searchParams.get('checkOut') || '');
-    const [person, setPerson] = useState({
-        Title: "",
-        Surname: "",
-        Othernames: "",
-        Phone: "",
-        Email: "",
-        Address: "",
-        CompanyName: "",
-        Occupation: "",
-        Remark: ""
-    });
 
-    // API Query
-    const { data: availabilityData, error, isLoading, isFetching } = useGetCategoryAvailabilityQuery(
-        {
-            category: room?.category || '',
-            arrival: checkInDate,
-            departure: checkOutDate
-        },
-        { skip: !checkInDate || !checkOutDate || !room, refetchOnMountOrArgChange: true }
-    );
+    // Removed API Availability Query as we are now an enquiry-based site
+    const isLoading = false;
+    const isFetching = false;
+    const isAvailable = true; // Always allow enquiry
+    const availabilityData = { data: 5 }; // Placeholder for UI if needed
 
     if (!room) {
         return (
@@ -52,7 +36,7 @@ export default function RoomDetailsPage() {
         );
     }
 
-    const isAvailable = availabilityData?.data > 0;
+
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -83,62 +67,21 @@ export default function RoomDetailsPage() {
 
     const totals = calculateTotal();
 
-    const [createReservation, { isLoading: isBooking }] = useCreateReservationMutation();
-    const { initializePayment } = usePaystack();
-    const [isPaying, setIsPaying] = useState(false);
+    const handleEnquiry = () => {
+        const message = `Hello DWS Hotels, I'm interested in booking the ${room.title} (${room.category}).
 
-    const handleBooking = async () => {
-        if (!person.Surname || !person.Phone || !person.Email) {
-            toast.warning("Please fill in all required guest details.");
-            return;
-        }
+Details:
+- Check-in: ${checkInDate || 'Not selected'}
+- Check-out: ${checkOutDate || 'Not selected'}
+- Number of Rooms: ${numberOfRooms}
+- Total Price Estimate: NGN ${totals.grandTotal.toLocaleString()}`;
 
-        const reference = "REF-" + Math.floor(Math.random() * 10000000000);
-        const amountInKobo = totals.grandTotal * 100;
-
-        setIsPaying(true);
-
-        initializePayment({
-            email: person.Email,
-            amount: amountInKobo,
-            reference,
-            onSuccess: async (response) => {
-                try {
-                    const payload = {
-                        ReservationId: "",
-                        Person: person,
-                        BookingDetails: [
-                            {
-                                ArrivalDate: checkInDate,
-                                DepartureDate: checkOutDate,
-                                Category: room.category.toUpperCase(),
-                                Quantity: numberOfRooms
-                            }
-                        ],
-                        PaymentDetail: {
-                            Amount: totals.grandTotal,
-                            TransactionReference: response.reference,
-                            Currency: "NGN",
-                            PaymentMethod: "PAYSTACK",
-                            PaymentDescription: `Booking for ${room.title}`
-                        }
-                    };
-                    await createReservation(payload).unwrap();
-                    toast.success("Payment successful! Reservation created.");
-                } catch (err) {
-                    console.error("Booking failed:", err);
-                    toast.error("Payment was successful but reservation failed. Please contact support with reference: " + response.reference);
-                } finally {
-                    setIsPaying(false);
-                }
-            },
-            onClose: () => {
-                setIsPaying(false);
-            },
-        });
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/2349040663871?text=${encodedMessage}`, '_blank');
+        toast.success("Opening WhatsApp...");
     };
 
-    const isProcessing = isFetching || isBooking || isPaying;
+    const isProcessing = false;
 
     return (
         <div className="min-h-screen bg-white dark:bg-background text-black dark:text-foreground font-sans">
@@ -322,20 +265,10 @@ export default function RoomDetailsPage() {
 
                         </div>
 
-                        {/* Availability Status */}
+                        {/* Enquiry Message Header */}
                         {checkInDate && checkOutDate && (
-                            <div className={`p-4 rounded-xl mb-4 text-center ${isFetching ? 'bg-gray-100 dark:bg-zinc-800 text-gray-500' : isAvailable ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
-                                {isFetching ? (
-                                    <div className="flex items-center justify-center gap-2">
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                        Checking availability...
-                                    </div>
-                                ) : isAvailable ? (
-                                    <span className="font-bold">{availabilityData?.data} Room Available!</span>
-                                ) : (
-                                    <span className="font-bold">Not Available</span>
-                                )}
-                                {error && <span className="block text-sm text-red-500 mt-1">Error checking availability</span>}
+                            <div className="p-4 rounded-xl mb-4 text-center bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400">
+                                <span className="font-bold">Ready to enquire for your stay?</span>
                             </div>
                         )}
 
@@ -343,7 +276,6 @@ export default function RoomDetailsPage() {
 
                         {isAvailable ? (<>
                             <div className="space-y-4">
-                                <h4 className="text-white font-bold text-lg">Guest Details</h4>
                                 <div className="grid grid-cols- gap-4">
                                     <Input
                                         label="Number of Rooms"
@@ -355,82 +287,6 @@ export default function RoomDetailsPage() {
                                         className="text-black"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <Input
-                                        label="Title"
-                                        value={person.Title}
-                                        onChange={(e) => setPerson({ ...person, Title: e.target.value })}
-                                        placeholder="Mr/Mrs/Ms"
-                                        className="text-black"
-                                    />
-                                    <Input
-                                        label="Surname"
-                                        required
-                                        value={person.Surname}
-                                        onChange={(e) => setPerson({ ...person, Surname: e.target.value })}
-                                        placeholder="Doe"
-                                        className="text-black"
-                                    />
-                                    <Input
-                                        label="Other Names"
-                                        required
-                                        value={person.Othernames}
-                                        onChange={(e) => setPerson({ ...person, Othernames: e.target.value })}
-                                        placeholder="John"
-                                        className="text-black"
-                                    />
-                                    <Input
-                                        label="Phone"
-                                        required
-                                        type="tel"
-                                        value={person.Phone}
-                                        onChange={(e) => setPerson({ ...person, Phone: e.target.value })}
-                                        placeholder="+234..."
-                                        className="text-black"
-                                    />
-                                </div>
-                                <Input
-                                    label="Email"
-                                    required
-                                    type="email"
-                                    value={person.Email}
-                                    onChange={(e) => setPerson({ ...person, Email: e.target.value })}
-                                    placeholder="john@example.com"
-                                    className="text-black"
-                                />
-                                <Input
-                                    label="Address"
-                                    required
-                                    value={person.Address}
-                                    onChange={(e) => setPerson({ ...person, Address: e.target.value })}
-                                    placeholder="123 Street..."
-                                    className="text-black"
-                                />
-                                <div className="grid grid-cols-2 gap-4">
-                                    <Input
-                                        label="Company Name"
-                                        value={person.CompanyName}
-                                        onChange={(e) => setPerson({ ...person, CompanyName: e.target.value })}
-                                        placeholder="Optional"
-                                        className="text-black"
-                                    />
-                                    <Input
-                                        label="Occupation"
-                                        required
-                                        value={person.Occupation}
-                                        onChange={(e) => setPerson({ ...person, Occupation: e.target.value })}
-                                        placeholder="Engineer"
-                                        className="text-black"
-                                    />
-                                </div>
-                                <Input
-                                    label="Remark"
-                                    value={person.Remark}
-                                    onChange={(e) => setPerson({ ...person, Remark: e.target.value })}
-                                    placeholder="Special requests..."
-                                    className="text-black"
-                                />
-
                             </div>
 
                             <hr className="border-gray-800" />
@@ -442,8 +298,8 @@ export default function RoomDetailsPage() {
                                 </div>
 
 
-                                <div className="flex justify-between font-bold text-lg pt-4 border-t border-gray-100">
-                                    <span>Total</span>
+                                <div className="flex justify-between font-bold text-lg pt-4">
+                                    <span>Total Estimate</span>
                                     <span>NGN {totals.grandTotal.toLocaleString()}</span>
                                 </div>
                             </div>
@@ -451,32 +307,18 @@ export default function RoomDetailsPage() {
 
 
                             <button
-                                onClick={handleBooking}
-                                disabled={!isAvailable || isProcessing}
-                                className={`w-full py-4 rounded-full font-bold flex items-center justify-center gap-2 transition-all 
-                                ${!isAvailable || isProcessing ? 'bg-gray-300 cursor-not-allowed text-gray-500' : 'bg-green-500 text-white hover:bg-gray-800 group'}`}
+                                onClick={handleEnquiry}
+                                className="w-full py-5 rounded-full font-bold flex items-center justify-center gap-3 transition-all bg-green-500 text-white hover:bg-[#20bd5a] group shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all"
                             >
-                                {isBooking ? (
-                                    <>
-                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                        Creating Reservation...
-                                    </>
-                                ) : isPaying ? (
-                                    <>
-                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                        Processing Payment...
-                                    </>
-                                ) : (
-                                    <>
-                                        <CreditCard className="w-5 h-5" />
-                                        Pay & Book
-                                        {isAvailable && !isProcessing && <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />}
-                                    </>
-                                )}
-                            </button></>) : ""}
+                                <MessageCircle className="w-6 h-6" />
+                                Enquire on WhatsApp
+                                <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
+                            </button>
+                        </>
+                        ) : ""}
 
 
-                        <p className="text-center text-gray-400 text-xs mt-4">Secured by Paystack</p>
+                        <p className="text-center text-gray-400 text-xs mt-4">Immediate support available 24/7</p>
                     </div>
                 </div>
 

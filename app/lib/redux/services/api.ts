@@ -3,28 +3,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const dwsApi = createApi({
     reducerPath: 'dwsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/',
+        baseUrl: process.env.NEXT_PUBLIC_PROD_URL,
         prepareHeaders: (headers) => {
-            headers.set('X-Api-Key', 'B4D123E3-5AD9-4584-8578-384B6F9A5688');
+            headers.set('X-Api-Key', process.env.NEXT_PUBLIC_PROD_API_KEY!);
             headers.set('Content-Type', 'application/json');
             return headers;
         },
     }),
     endpoints: (builder) => ({
-        getAvailability: builder.query<any, { arrival: string; departure: string }>({
-            query: ({ arrival, departure }) => `api/Availability/${arrival}/${departure}`,
-        }),
-        getCategoryAvailability: builder.query<any, { category: string; arrival: string; departure: string }>({
-            query: ({ category, arrival, departure }) => `api/Availability/${category.toUpperCase()}/${arrival}/${departure}`,
-        }),
-        createReservation: builder.mutation<any, any>({
-            query: (bookingData) => ({
-                url: 'api/Reservation',
-                method: 'POST',
-                body: bookingData,
-            }),
-        }),
+        // Endpoints removed as we moved to a WhatsApp enquiry system
     }),
 });
 
-export const { useGetAvailabilityQuery, useGetCategoryAvailabilityQuery, useCreateReservationMutation } = dwsApi;
+export const { } = dwsApi;

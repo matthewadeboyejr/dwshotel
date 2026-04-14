@@ -41,7 +41,7 @@ export default function StealDealSection() {
     {
       id: 6,
       title: 'Platinum experience for premium guests',
-      price: 'NGN60,000',
+      price: 'NGN50,000',
       period: '/night',
       image: '/platinum-home.jpeg',
       location: 'DWS Hotel - Abraka',

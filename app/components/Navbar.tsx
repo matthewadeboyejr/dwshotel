@@ -25,7 +25,6 @@ export default function Navbar() {
             <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link>
             <Link href="/rooms" className="text-muted-foreground hover:text-foreground transition-colors">Rooms</Link>
             <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link>
-            <Link href="/properties" className="text-muted-foreground hover:text-foreground transition-colors">Online booking</Link>
             <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
           </div>
 
@@ -52,7 +51,7 @@ export default function Navbar() {
           <Link href="/" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">Home</Link>
           <Link href="/rooms" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">Rooms</Link>
           <Link href="/about" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">About</Link>
-          <Link href="/properties" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">Online booking</Link>
+          <Link href="/rooms" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">Online booking</Link>
           <Link href="/contact" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground text-lg py-2">Contact</Link>
 
           <div className="flex flex-col w-full space-y-3 pt-4 border-t border-gray-100">

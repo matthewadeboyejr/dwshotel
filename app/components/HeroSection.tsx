@@ -47,7 +47,7 @@ export default function HeroSection() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
-            href="/properties"
+            href="/rooms"
             className="group px-8 py-4 bg-green-500 text-white text-lg font-semibold rounded-full hover:bg-green-400 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-green-500/25"
           >
             Book Now
