@@ -76,14 +76,14 @@ export default function StealDealSection() {
     <section className="w-full bg-white dark:bg-background py-20">
       <div className="mx-4 md:mx-20">
         {/* Section Title */}
-        <h2 className="text-4xl md:text-6xl font-bold text-black dark:text-foreground text-center mb-16">
-          steal deal
+        <h2 className="text-4xl  md:text-6xl  text-black dark:text-foreground text-center mb-16">
+          Steal Deal
         </h2>
 
         {/* Carousel Container */}
         <div className="relative group flex flex-col lg:block gap-6">
           {/* Main Image Card */}
-          <div className="relative w-full h-[400px] md:h-[700px] rounded-3xl md:rounded-[3rem] overflow-hidden order-1 lg:order-0">
+          <div className="relative w-full h-[400px] md:h-[700px]  overflow-hidden order-1 lg:order-0">
             {/* Background Image with Transition */}
             <div
               className="w-full h-full bg-cover bg-center transition-all duration-700 ease-in-out"
@@ -130,7 +130,7 @@ export default function StealDealSection() {
                 <span className="text-3xl md:text-5xl font-bold text-black dark:text-white">{slides[currentSlide].price}</span>
                 <span className="text-gray-400 text-sm md:text-lg">{slides[currentSlide].period}</span>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white leading-tight">
+              <h3 className="text-xl md:text-2xl  dark:text-white leading-tight">
                 {slides[currentSlide].title}
               </h3>
             </div>

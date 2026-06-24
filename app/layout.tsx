@@ -70,8 +70,9 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <ReduxProvider>
@@ -79,7 +80,7 @@ export default function RootLayout({
             {children}
             <Footer />
           </ReduxProvider>
-          <Toaster richColors position="top-right" theme="dark" />
+          <Toaster richColors position="top-right" theme="light" />
         </ThemeProvider>
       </body>
     </html>

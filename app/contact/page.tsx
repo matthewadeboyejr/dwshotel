@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CommitmentSection from '../components/CommitmentSection';
 import { Mail, Phone, MapPin, MessageCircle, Clock } from 'lucide-react';
+import ScrollReveal from '../components/ui/ScrollReveal';
 
 export default function ContactPage() {
     const handleWhatsAppClick = () => {
@@ -16,16 +17,16 @@ export default function ContactPage() {
 
 
             {/* Hero Section */}
-            <div className="relative h-[60vh] bg-black text-white flex items-center justify-center overflow-hidden rounded-4xl mx-4 md:mx-20">
+            <div className="relative h-[60vh] bg-black text-white flex items-center justify-center overflow-hidden  ">
                 <div className="absolute inset-0 bg-black/60 z-10" />
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: 'url("/superior-home.jpeg")' }} // Using existing image
                 />
-                <div className="relative z-20 text-center space-y-4 px-4">
+                <ScrollReveal className="relative z-20 text-center space-y-4 px-4" animation="fade-in-up">
                     <p className="text-sm font-bold tracking-widest uppercase text-gray-300">Get in Touch</p>
                     <h1 className="text-5xl md:text-7xl font-bold">Contact Us</h1>
-                </div>
+                </ScrollReveal>
             </div>
 
             {/* Contact Content */}
@@ -33,10 +34,10 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
                     {/* Information Column */}
-                    <div className="space-y-12">
+                    <ScrollReveal className="space-y-12" animation="fade-in-up">
                         <div>
-                            <h2 className="text-4xl font-bold mb-6 text-black dark:text-white">We'd love to hear from you</h2>
-                            <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                            <h2 className="text-4xl  mb-6 text-black dark:text-white">We'd love to hear from you</h2>
+                            <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                                 Whether you have a question about our rooms, pricing, need a reservation, or anything else, our team is ready to answer all your questions.
                             </p>
                         </div>
@@ -74,16 +75,16 @@ export default function ContactPage() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ScrollReveal>
 
                     {/* WhatsApp Action Column (Replacing Form) */}
-                    <div className="bg-gray-50 dark:bg-zinc-900 rounded-3xl p-8 md:p-12 flex flex-col justify-center text-center space-y-8">
+                    <ScrollReveal className="bg-gray-50 dark:bg-zinc-900 rounded-3xl p-8 md:p-12 flex flex-col justify-center text-center space-y-8" animation="fade-in-up" delay={200}>
                         <div>
                             <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <MessageCircle className="w-10 h-10" />
                             </div>
-                            <h3 className="text-3xl font-bold mb-4 text-black dark:text-white">Chat on WhatsApp</h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-lg">
+                            <h3 className="text-3xl mb-4 text-black dark:text-white">Chat on WhatsApp</h3>
+                            <p className="text-gray-600 dark:text-gray-400 text-base">
                                 need immediate assistance? Start a conversation with our support team on WhatsApp for quick responses.
                             </p>
                         </div>
@@ -99,7 +100,7 @@ export default function ContactPage() {
                         <p className="text-sm text-gray-500">
                             Typical response time: Under 5 minutes
                         </p>
-                    </div>
+                    </ScrollReveal>
 
                 </div>
             </div>

@@ -14,7 +14,7 @@ export default function FeaturedRooms() {
           {rooms.map((room, index) => (
             <Link key={index} href={`/rooms/${room.id}`}>
               <div className="flex flex-col gap-4 group cursor-pointer">
-                <div className="relative w-full aspect-square rounded-3xl overflow-hidden">
+                <div className="relative w-full aspect-square  overflow-hidden">
                   <img
                     src={room.image}
                     alt="Room"
@@ -36,7 +36,7 @@ export default function FeaturedRooms() {
 
           {/* Large Promo Card */}
           <Link href="/rooms/5" className="col-span-1 md:col-span-2 block">
-            <div className="bg-gray-50 dark:bg-zinc-900 rounded-3xl overflow-hidden flex flex-col md:flex-row p-8 gap-6 shadow-sm h-full group cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+            <div className="bg-gray-50 dark:bg-zinc-900  overflow-hidden flex flex-col md:flex-row p-8 gap-6 shadow-sm h-full group cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
               <div className="flex-1 flex flex-col justify-center space-y-6">
                 <p className="text-xs font-bold tracking-widest text-gray-500 uppercase">Business Class</p>
                 <h3 className="text-3xl font-semibold text-black dark:text-white leading-tight">
@@ -53,7 +53,7 @@ export default function FeaturedRooms() {
                   </span>
                 </div>
               </div>
-              <div className="flex-1 relative min-h-[200px] md:min-h-full rounded-2xl overflow-hidden">
+              <div className="flex-1 relative min-h-[200px] md:min-h-full  overflow-hidden">
                 <img
                   src="/business-home.jpeg"
                   alt="Featured"

@@ -1,8 +1,9 @@
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
+import AboutOverview from './components/AboutOverview';
 import FeaturedRooms from './components/FeaturedRooms';
 import AccommodationSection from './components/AccommodationSection';
-import SafestAffordableSection from './components/SafestAffordableSection';
+import HotelFacilities from './components/HotelFacilities';
 import StealDealSection from './components/StealDealSection';
 import CommonQueriesSection from './components/CommonQueriesSection';
 import SpotlightsSection from './components/SpotlightsSection';
@@ -15,13 +16,14 @@ export default function Home() {
     <div className="min-h-screen bg-background">
 
       <HeroSection />
-      <FeaturedRooms />
+      <AboutOverview />
+      {/*       <FeaturedRooms /> */}
       <AccommodationSection />
-      <SafestAffordableSection />
-      <StealDealSection />
+      {/*  <StealDealSection /> */}
+      <HotelFacilities />
       <CommonQueriesSection />
       {/* <IntroVideo /> */}
-      <CommitmentSection />
+
 
     </div>
   );

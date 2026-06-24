@@ -11,6 +11,7 @@ import CommitmentSection from '@/app/components/CommitmentSection';
 import Input from '@/app/components/ui/Input';
 import { toast } from 'sonner';
 import { MessageCircle } from 'lucide-react';
+import ScrollReveal from '../../components/ui/ScrollReveal';
 
 export default function RoomDetailsPage() {
     const params = useParams();
@@ -88,7 +89,7 @@ Details:
             {/* Hero Header */}
             <div className="bg-gray-50 dark:bg-zinc-900 pt-32 pb-12">
                 <div className="mx-4 md:mx-20">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
+                    <ScrollReveal className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8" animation="fade-in-up">
                         <div>
                             <div className="flex items-center gap-2 text-sm text-gray-500 font-medium uppercase tracking-widest mb-4">
                                 <span>Home</span>
@@ -119,10 +120,10 @@ Details:
                                 <Heart className="w-5 h-5 text-black dark:text-white" />
                             </button>
                         </div>
-                    </div>
+                    </ScrollReveal>
 
                     {/* Gallery Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-auto md:h-[600px] rounded-3xl md:rounded-[2rem] overflow-hidden relative">
+                    <ScrollReveal className="grid grid-cols-1 md:grid-cols-4 gap-4 h-auto md:h-[600px] rounded-3xl md:rounded-[2rem] overflow-hidden relative" animation="fade-in-up" delay={200}>
                         {/* Main Large Image */}
                         <div className="md:col-span-2 md:row-span-2 relative h-[300px] md:h-full">
                             <Image src={room.image} alt={room.title} fill className="object-cover hover:scale-105 transition-transform duration-700" />
@@ -141,14 +142,14 @@ Details:
                                 {room.price}<span className="text-sm font-normal text-gray-400">/night</span>
                             </div>
                         </div>
-                    </div>
+                    </ScrollReveal>
                 </div>
             </div>
 
             <div className="mx-4 md:mx-20 py-20 grid grid-cols-1 lg:grid-cols-3 gap-16">
 
                 {/* Left Column: Details */}
-                <div className="lg:col-span-2 space-y-16">
+                <ScrollReveal className="lg:col-span-2 space-y-16" animation="fade-in-up">
 
                     {/* Quick Stats */}
                     <div className="flex flex-wrap gap-8 py-8 border-y border-gray-100 dark:border-zinc-800">
@@ -225,10 +226,10 @@ Details:
                         </div>
                     </div>
 
-                </div>
+                </ScrollReveal>
 
                 {/* Right Column: Sticky Booking Widget */}
-                <div className="lg:col-span-1">
+                <ScrollReveal className="lg:col-span-1" animation="fade-in-up" delay={200}>
                     <div className="bg-black dark:bg-zinc-900 border dark:border-zinc-800 text-white rounded-2xl p-8 sticky top-32 ">
                         <div className="flex justify-between items-center mb-8">
                             <h3 className="text-2xl font-bold">Booking</h3>
@@ -320,7 +321,7 @@ Details:
 
                         <p className="text-center text-gray-400 text-xs mt-4">Immediate support available 24/7</p>
                     </div>
-                </div>
+                </ScrollReveal>
 
             </div>
 

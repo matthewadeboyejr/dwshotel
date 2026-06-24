@@ -25,7 +25,7 @@ export default function RoomCard({ room }: { room: RoomProps }) {
     return (
         <Link href={href} className="group cursor-pointer block">
             {/* Image Card */}
-            <div className="relative aspect-4/5 rounded-4xl overflow-hidden mb-6">
+            <div className="relative aspect-4/5  overflow-hidden mb-6">
                 <img
                     src={room.image}
                     alt={room.title}
@@ -44,7 +44,7 @@ export default function RoomCard({ room }: { room: RoomProps }) {
 
                 {/* Bottom Details */}
                 <div className="absolute bottom-6 left-6 right-6">
-                    <span className="inline-block bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                    <span className="inline-block bg-yellow-600 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
                         {room.category}
                     </span>
                     <h3 className="text-2xl font-bold text-white leading-tight mb-2 group-hover:underline decoration-2 underline-offset-4">
